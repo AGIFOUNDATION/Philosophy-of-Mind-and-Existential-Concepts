@@ -1,0 +1,1458 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Philosophy of Mind and Existential Concepts: An Interactive Taxonomy</title>
+    <style>
+        :root {
+            --level1-color: rgba(135, 206, 250, 0.8);
+            --level2-color: rgba(100, 149, 237, 0.8);
+            --level3-color: rgba(65, 105, 225, 0.8);
+            --level4-color: rgba(25, 25, 112, 0.8);
+            --level5-color: rgba(0, 0, 50, 0.8);
+            --level6-color: rgba(0, 0, 25, 0.8);
+            --level7-color: rgba(0, 0, 10, 0.8);
+        }
+        
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Arial', sans-serif;
+        }
+        
+        body {
+            background-color: #001;
+            color: white;
+            line-height: 1.6;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+        
+        header {
+            text-align: center;
+            margin-bottom: 2rem;
+        }
+        
+        h1 {
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+        }
+        
+        .subtitle {
+            font-size: 1.2rem;
+            opacity: 0.8;
+        }
+        
+        .controls {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 2rem;
+            flex-wrap: wrap;
+            gap: 1rem;
+        }
+        
+        .search-container {
+            position: relative;
+            flex: 1;
+            min-width: 250px;
+        }
+        
+        #search {
+            width: 100%;
+            padding: 0.8rem;
+            border-radius: 4px;
+            border: none;
+            background-color: rgba(255, 255, 255, 0.1);
+            color: white;
+            font-size: 1rem;
+        }
+        
+        #search::placeholder {
+            color: rgba(255, 255, 255, 0.5);
+        }
+        
+        .filter-container {
+            display: flex;
+            gap: 0.5rem;
+            flex-wrap: wrap;
+        }
+        
+        .filter-btn {
+            background-color: rgba(255, 255, 255, 0.1);
+            border: none;
+            color: white;
+            padding: 0.5rem 1rem;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+        
+        .filter-btn:hover, .filter-btn.active {
+            background-color: rgba(255, 255, 255, 0.3);
+        }
+        
+        .iceberg-container {
+            position: relative;
+            width: 100%;
+            background: linear-gradient(180deg, 
+                #87CEFA 0%, 
+                #4169E1 40%, 
+                #191970 70%, 
+                #000033 100%);
+            border-radius: 8px;
+            overflow: hidden;
+            min-height: 1800px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5);
+        }
+        
+        .iceberg-level {
+            position: relative;
+            padding: 2rem;
+            transition: opacity 0.3s;
+        }
+        
+        .level-title {
+            text-align: center;
+            font-size: 1.8rem;
+            margin-bottom: 1rem;
+            padding: 0.5rem;
+            background-color: rgba(0, 0, 0, 0.3);
+            border-radius: 4px;
+        }
+        
+        .level-1 { background-color: var(--level1-color); }
+        .level-2 { background-color: var(--level2-color); }
+        .level-3 { background-color: var(--level3-color); }
+        .level-4 { background-color: var(--level4-color); }
+        .level-5 { background-color: var(--level5-color); }
+        .level-6 { background-color: var(--level6-color); }
+        .level-7 { background-color: var(--level7-color); }
+        
+        .concept-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+            gap: 1rem;
+        }
+        
+        .concept {
+            background-color: rgba(0, 0, 0, 0.3);
+            padding: 1rem;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: transform 0.3s, box-shadow 0.3s;
+            position: relative;
+        }
+        
+        .concept:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+        }
+        
+        .concept h3 {
+            margin-bottom: 0.5rem;
+        }
+        
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 100;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.8);
+            justify-content: center;
+            align-items: center;
+        }
+        
+        .modal-content {
+            background-color: #0a1938;
+            padding: 2rem;
+            border-radius: 8px;
+            max-width: 800px;
+            width: 90%;
+            max-height: 90vh;
+            overflow-y: auto;
+            position: relative;
+        }
+        
+        .close-modal {
+            position: absolute;
+            top: 1rem;
+            right: 1rem;
+            font-size: 1.5rem;
+            cursor: pointer;
+            background: none;
+            border: none;
+            color: white;
+        }
+        
+        .modal-title {
+            font-size: 2rem;
+            margin-bottom: 1rem;
+            padding-bottom: 0.5rem;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.3);
+        }
+        
+        .modal-category {
+            display: inline-block;
+            background-color: rgba(255, 255, 255, 0.2);
+            padding: 0.3rem 0.6rem;
+            border-radius: 4px;
+            font-size: 0.8rem;
+            margin-bottom: 1rem;
+        }
+        
+        .modal-description {
+            margin-bottom: 1.5rem;
+            line-height: 1.8;
+        }
+        
+        .related-concepts {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+            margin-top: 1rem;
+        }
+        
+        .related-concept {
+            background-color: rgba(255, 255, 255, 0.1);
+            padding: 0.3rem 0.6rem;
+            border-radius: 4px;
+            font-size: 0.9rem;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+        
+        .related-concept:hover {
+            background-color: rgba(255, 255, 255, 0.3);
+        }
+        
+        .highlight {
+            animation: glow 1.5s ease-in-out infinite alternate;
+        }
+        
+        @keyframes glow {
+            from {
+                box-shadow: 0 0 5px rgba(255, 255, 255, 0.5);
+            }
+            to {
+                box-shadow: 0 0 15px rgba(255, 255, 255, 0.8), 0 0 30px rgba(255, 255, 255, 0.5);
+            }
+        }
+        
+        footer {
+            text-align: center;
+            margin-top: 2rem;
+            padding: 1rem;
+            font-size: 0.9rem;
+            opacity: 0.7;
+        }
+        
+        .credits {
+            margin-top: 0.5rem;
+        }
+        
+        .legend {
+            background-color: rgba(0, 0, 0, 0.5);
+            padding: 1rem;
+            border-radius: 4px;
+            margin-bottom: 2rem;
+        }
+        
+        .legend h3 {
+            margin-bottom: 0.5rem;
+        }
+        
+        .legend-items {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 1rem;
+        }
+        
+        .legend-item {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        
+        .legend-color {
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+        }
+        
+        .top-btn {
+            position: fixed;
+            bottom: 2rem;
+            right: 2rem;
+            background-color: rgba(65, 105, 225, 0.7);
+            color: white;
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            cursor: pointer;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
+            opacity: 0;
+            transition: opacity 0.3s;
+            z-index: 50;
+            border: none;
+        }
+        
+        .top-btn.visible {
+            opacity: 1;
+        }
+        
+        .depth-indicator {
+            position: fixed;
+            top: 50%;
+            right: 2rem;
+            transform: translateY(-50%);
+            width: 4px;
+            height: 300px;
+            background-color: rgba(255, 255, 255, 0.1);
+            border-radius: 2px;
+            z-index: 10;
+        }
+        
+        .depth-marker {
+            width: 12px;
+            height: 12px;
+            background-color: white;
+            border-radius: 50%;
+            position: absolute;
+            left: -4px;
+            transform: translateY(-50%);
+            transition: top 0.3s;
+        }
+        
+        @media (max-width: 768px) {
+            .concept-grid {
+                grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+            }
+            
+            .controls {
+                flex-direction: column;
+            }
+            
+            .depth-indicator {
+                display: none;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>Philosophy of Mind and Existential Concepts</h1>
+            <p class="subtitle">An Interactive Taxonomy of Contemporary Philosophical Thought</p>
+        </header>
+        
+        <div class="controls">
+            <div class="search-container">
+                <input type="text" id="search" placeholder="Search for a concept...">
+            </div>
+            <div class="filter-container">
+                <button class="filter-btn active" data-category="all">All</button>
+                <button class="filter-btn" data-category="cosmology">Cosmology</button>
+                <button class="filter-btn" data-category="consciousness">Consciousness</button>
+                <button class="filter-btn" data-category="existential">Existential</button>
+                <button class="filter-btn" data-category="metaphysics">Metaphysics</button>
+            </div>
+        </div>
+        
+        <div class="legend">
+            <h3>Categories</h3>
+            <div class="legend-items">
+                <div class="legend-item">
+                    <div class="legend-color" style="background-color: #FF9999;"></div>
+                    <span>Cosmology</span>
+                </div>
+                <div class="legend-item">
+                    <div class="legend-color" style="background-color: #99FF99;"></div>
+                    <span>Consciousness</span>
+                </div>
+                <div class="legend-item">
+                    <div class="legend-color" style="background-color: #9999FF;"></div>
+                    <span>Existential</span>
+                </div>
+                <div class="legend-item">
+                    <div class="legend-color" style="background-color: #FFFF99;"></div>
+                    <span>Metaphysics</span>
+                </div>
+            </div>
+        </div>
+        
+        <div class="iceberg-container">
+            <div class="iceberg-level level-1">
+                <h2 class="level-title">Surface Level</h2>
+                <div class="concept-grid" id="level-1-grid"></div>
+            </div>
+            
+            <div class="iceberg-level level-2">
+                <h2 class="level-title">Shallow Waters</h2>
+                <div class="concept-grid" id="level-2-grid"></div>
+            </div>
+            
+            <div class="iceberg-level level-3">
+                <h2 class="level-title">Middle Depths</h2>
+                <div class="concept-grid" id="level-3-grid"></div>
+            </div>
+            
+            <div class="iceberg-level level-4">
+                <h2 class="level-title">Deep Waters</h2>
+                <div class="concept-grid" id="level-4-grid"></div>
+            </div>
+            
+            <div class="iceberg-level level-5">
+                <h2 class="level-title">Abyssal Zone</h2>
+                <div class="concept-grid" id="level-5-grid"></div>
+            </div>
+            
+            <div class="iceberg-level level-6">
+                <h2 class="level-title">Hadal Zone</h2>
+                <div class="concept-grid" id="level-6-grid"></div>
+            </div>
+            
+            <div class="iceberg-level level-7">
+                <h2 class="level-title">Philosophical Trenches</h2>
+                <div class="concept-grid" id="level-7-grid"></div>
+            </div>
+        </div>
+        
+        <div class="depth-indicator">
+            <div class="depth-marker" style="top: 0%;"></div>
+        </div>
+        
+        <button class="top-btn" id="topBtn">↑</button>
+        
+        <div class="modal" id="conceptModal">
+            <div class="modal-content">
+                <button class="close-modal" id="closeModal">×</button>
+                <h2 class="modal-title" id="modalTitle">Concept Title</h2>
+                <span class="modal-category" id="modalCategory">Category</span>
+                <div class="modal-description" id="modalDescription">
+                    Description goes here.
+                </div>
+                <h3>Related Concepts</h3>
+                <div class="related-concepts" id="relatedConcepts"></div>
+            </div>
+        </div>
+        
+        <footer>
+            <p>This interactive visualization presents philosophical concepts related to consciousness, existence, and reality in a hierarchical structure.</p>
+            <p class="credits">© 2025 | Interactive Philosophical Taxonomy</p>
+        </footer>
+    </div>
+    
+    <script>
+        // Philosophical concepts database
+        const concepts = [
+            // Level 1 - Surface Level
+            {
+                id: 'fermi-paradox',
+                name: 'Fermi Paradox',
+                level: 1,
+                category: 'cosmology',
+                description: 'The apparent contradiction between the high probability of extraterrestrial civilizations existing and the lack of contact or evidence for such civilizations. Named after physicist Enrico Fermi, who asked "Where are they?" when discussing the likelihood of alien life.',
+                relatedConcepts: ['great-filter', 'drake-equation', 'grabby-aliens']
+            },
+            {
+                id: 'anthropic-principle',
+                name: 'Anthropic Principle',
+                level: 1,
+                category: 'cosmology',
+                description: 'The philosophical consideration that observations of the universe must be compatible with the conscious and sapient life that observes it. In its weak form, it explains why the observed universe appears finely tuned for the existence of life.',
+                relatedConcepts: ['fine-tuning', 'participatory-anthropic-principle', 'weinbergs-anthropic-prediction']
+            },
+            {
+                id: 'simulation-argument',
+                name: 'Simulation Argument',
+                level: 1,
+                category: 'metaphysics',
+                description: 'Argues that at least one of the following propositions is true: (1) humanity will likely go extinct before reaching a "posthuman" stage; (2) any posthuman civilization is extremely unlikely to run significant simulations of its evolutionary history; or (3) we are almost certainly living in a computer simulation.',
+                relatedConcepts: ['boltzmann-brains', 'brain-in-a-vat', 'digital-physics']
+            },
+            {
+                id: 'many-worlds',
+                name: 'Many Worlds',
+                level: 1,
+                category: 'metaphysics',
+                description: 'An interpretation of quantum mechanics that asserts the objective reality of the universal wavefunction and denies the actuality of wavefunction collapse. All possible outcomes of quantum measurements are realized in some "world" or universe.',
+                relatedConcepts: ['quantum-immortality', 'modal-realism', 'multiverse']
+            },
+            {
+                id: 'great-filter',
+                name: 'Great Filter',
+                level: 1,
+                category: 'cosmology',
+                description: 'In the context of the Fermi paradox, the Great Filter is a proposed explanation for why we don\'t observe any extraterrestrial civilizations: something prevents them from developing to the point where they would be observable from Earth.',
+                relatedConcepts: ['fermi-paradox', 'existential-risk', 'grabby-aliens']
+            },
+            {
+                id: 'consciousness',
+                name: 'Consciousness',
+                level: 1,
+                category: 'consciousness',
+                description: 'The state or quality of awareness, or of being aware of an external object or something within oneself. Philosophers have used the term to refer to the ability to perceive, to feel, to be self-aware, and to think.',
+                relatedConcepts: ['qualia', 'p-zombies', 'hard-problem-of-consciousness']
+            },
+            {
+                id: 'selection-effects',
+                name: 'Selection Effects',
+                level: 1,
+                category: 'cosmology',
+                description: 'Selection effects occur when a sampling process systematically excludes or underrepresents certain types of data. In anthropic reasoning, selection effects arise because observers can only exist in universes compatible with their existence.',
+                relatedConcepts: ['anthropic-principle', 'observation-selection-bias', 'cosmic-variance']
+            },
+            {
+                id: 'solipsism',
+                name: 'Solipsism',
+                level: 1,
+                category: 'metaphysics',
+                description: 'The philosophical idea that only one\'s mind is sure to exist. As an epistemological position, solipsism holds that knowledge of anything outside one\'s own mind is unsure; the external world and other minds cannot be known and might not exist outside the mind.',
+                relatedConcepts: ['idealism', 'brain-in-a-vat', 'egocentric-presentism']
+            },
+            {
+                id: 'fine-tuning',
+                name: 'Fine-tuning',
+                level: 1,
+                category: 'cosmology',
+                description: 'The observation that the fundamental physical constants and initial conditions of the universe appear to be finely tuned to permit the existence of complex structures like stars, planets, and ultimately life as we know it. A small change in any of these values would make life impossible.',
+                relatedConcepts: ['anthropic-principle', 'multiverse', 'god-hypothesis']
+            },
+            
+            // Level 2 - Shallow Waters
+            {
+                id: 'drake-equation',
+                name: 'Drake Equation',
+                level: 2,
+                category: 'cosmology',
+                description: 'A probabilistic argument used to estimate the number of active, communicative extraterrestrial civilizations in our galaxy. The equation identifies various factors necessary for the development of such civilizations, including the rate of star formation and the fraction of planets that develop life.',
+                relatedConcepts: ['fermi-paradox', 'great-filter', 'seti']
+            },
+            {
+                id: 'doomsday-argument',
+                name: 'Doomsday Argument',
+                level: 2,
+                category: 'existential',
+                description: 'A probabilistic argument suggesting that we\'ve systematically underestimated the probability of the human species going extinct relatively soon. It considers our temporal position in human history and suggests that we\'re more likely to be living near the middle of human existence than near the beginning.',
+                relatedConcepts: ['existential-risk', 'anthropic-principle', 'observation-selection-bias']
+            },
+            {
+                id: 'library-of-babel',
+                name: 'Library of Babel',
+                level: 2,
+                category: 'metaphysics',
+                description: 'A thought experiment developed from Jorge Luis Borges\' short story, which describes a universe in the form of a vast library containing all possible 410-page books with a certain character set. It explores concepts of infinity, information, and the nature of meaning.',
+                relatedConcepts: ['infinite-universes', 'information-theory', 'mathematical-universe']
+            },
+            {
+                id: 'quantum-immortality',
+                name: 'Quantum Immortality',
+                level: 2,
+                category: 'metaphysics',
+                description: 'A thought experiment in which the Many-Worlds interpretation of quantum mechanics is assumed. It suggests that a conscious observer would always perceive themselves surviving in at least one branch of the quantum multiverse, no matter how unlikely survival becomes.',
+                relatedConcepts: ['many-worlds', 'anthropic-principle', 'quantum-suicide']
+            },
+            {
+                id: 'existential-risk',
+                name: 'Existential Risk',
+                level: 2,
+                category: 'existential',
+                description: 'Any risk that has the potential to eliminate all of humanity or, at the very least, kill large swaths of the global population, leaving the survivors unable to rebuild society to current standards of living. Examples include nuclear war, engineered pandemics, and advanced AI.',
+                relatedConcepts: ['doomsday-argument', 'great-filter', 'the-precipice']
+            },
+            {
+                id: 'p-zombies',
+                name: 'P-Zombies',
+                level: 2,
+                category: 'consciousness',
+                description: 'Philosophical zombies are hypothetical beings that are physically identical to humans in all respects, including behavior, but lack conscious experience. The concept is used in arguments against physicalism—the view that everything that exists is physical.',
+                relatedConcepts: ['consciousness', 'qualia', 'hard-problem-of-consciousness']
+            },
+            {
+                id: 'open-individualism',
+                name: 'Open Individualism',
+                level: 2,
+                category: 'existential',
+                description: 'The view that there exists only one numerically identical subject, who is everyone at all times. It dissolves the boundary between individuals, suggesting that all conscious experiences are had by the same entity. Contrasts with closed individualism (we are separate selves) and empty individualism (there is no persistent self).',
+                relatedConcepts: ['empty-individualism', 'closed-individualism', 'no-self']
+            },
+            {
+                id: 'qualia',
+                name: 'Qualia',
+                level: 2,
+                category: 'consciousness',
+                description: 'Individual instances of subjective, conscious experience. The term refers to the introspectively accessible, phenomenal aspects of our mental lives. Examples include the perceived sensation of pain, the taste of wine, or the perceived redness of an apple.',
+                relatedConcepts: ['consciousness', 'p-zombies', 'mary-the-color-scientist']
+            },
+            {
+                id: 'boltzmann-brains',
+                name: 'Boltzmann Brains',
+                level: 2,
+                category: 'consciousness',
+                description: 'Hypothetical self-aware entities that arise due to random quantum fluctuations out of a state of thermodynamic equilibrium. Named after Ludwig Boltzmann, these theoretical "brains" serve as a reductio ad absurdum of certain cosmological models that predict their existence in greater numbers than evolved observers.',
+                relatedConcepts: ['simulation-argument', 'observer-moment', 'brain-in-a-vat']
+            },
+            
+            // Level 3 - Middle Depths
+            {
+                id: 'mediocrity-principle',
+                name: 'Mediocrity Principle',
+                level: 3,
+                category: 'cosmology',
+                description: 'The philosophical notion that there is nothing special about humans or Earth. It suggests that Earth is a typical rocky planet, that the Sun is a typical star, and that humanoid intelligence is likely to develop wherever there are Earth-like planets with enough time for evolutionary processes.',
+                relatedConcepts: ['copernican-principle', 'anthropic-principle', 'cosmic-humility']
+            },
+            {
+                id: 'poincare-recurrence',
+                name: 'Poincaré Recurrence',
+                level: 3,
+                category: 'metaphysics',
+                description: 'In certain physical systems, after a sufficiently long time, the system will return to a state very close to its initial state. This theorem implies that in a finite system with fixed energy, given enough time, nearly all states will recur.',
+                relatedConcepts: ['eternal-return', 'cyclical-time', 'ergodic-theory']
+            },
+            {
+                id: 'presumptuous-philosopher',
+                name: 'Presumptuous Philosopher',
+                level: 3,
+                category: 'existential',
+                description: 'A thought experiment proposed by Nick Bostrom to highlight problems with anthropic reasoning. In it, a philosopher uses the Self-Sampling Assumption to decide between competing theories based solely on the number of observers they predict, ignoring conventional evidence.',
+                relatedConcepts: ['anthropic-bias', 'ssa-vs-sia', 'observation-selection-effects']
+            },
+            {
+                id: 'swampman',
+                name: 'Swampman',
+                level: 3,
+                category: 'consciousness',
+                description: 'A thought experiment by philosopher Donald Davidson. Imagine lightning strikes a swamp and by sheer chance creates a molecule-for-molecule duplicate of Davidson. Would this duplicate, despite having no causal history, have the same thoughts and mental content as the original?',
+                relatedConcepts: ['teleology', 'mind-identity', 'functionalism']
+            },
+            {
+                id: 'sleeping-beauty-problem',
+                name: 'Sleeping Beauty Problem',
+                level: 3,
+                category: 'metaphysics',
+                description: 'A probability puzzle about a perfect rationalist who is put to sleep, then awakened either once or twice depending on a coin toss, with memory erasure in between. Upon awakening, what should be her credence that the coin came up heads?',
+                relatedConcepts: ['anthropic-bias', 'self-locating-belief', 'credence']
+            },
+            {
+                id: 'string-theoretic-landscape',
+                name: 'String-theoretic Landscape',
+                level: 3,
+                category: 'cosmology',
+                description: 'In string theory, the landscape refers to the large number of possible vacuum states, each corresponding to different possible universes with different physical constants. Some estimates put the number at 10^500 different possible configurations.',
+                relatedConcepts: ['multiverse', 'anthropic-principle', 'vacuum-selection']
+            },
+            {
+                id: 'vertiginous-question',
+                name: 'Vertiginous Question',
+                level: 3,
+                category: 'existential',
+                description: '"Why is there something rather than nothing?" This fundamental philosophical question asks about the origin and existence of reality itself. It invokes a sense of metaphysical vertigo as we contemplate the possibility of absolute nothingness versus existence.',
+                relatedConcepts: ['ontology', 'cosmological-argument', 'ex-nihilo']
+            },
+            {
+                id: 'modal-realism',
+                name: 'Modal Realism',
+                level: 3,
+                category: 'metaphysics',
+                description: 'The view, notably advocated by David Lewis, that all possible worlds are as real as the actual world. On this view, "actual" is merely indexical – like "here" or "now" – referring to the world where the speaker is located.',
+                relatedConcepts: ['many-worlds', 'possible-worlds-semantics', 'multiverse']
+            },
+            {
+                id: 'ssa-vs-sia',
+                name: 'SSA vs SIA',
+                level: 3,
+                category: 'metaphysics',
+                description: 'Two competing principles in anthropic reasoning. The Self-Sampling Assumption (SSA) states you should reason as if you were randomly selected from all observers. The Self-Indication Assumption (SIA) states you should reason as if you were randomly selected from all possible observers.',
+                relatedConcepts: ['anthropic-principle', 'doomsday-argument', 'presumptuous-philosopher']
+            },
+            {
+                id: 'nick-bostrom',
+                name: 'Nick Bostrom',
+                level: 3,
+                category: 'existential',
+                description: 'A Swedish philosopher known for his work on existential risk, the anthropic principle, human enhancement ethics, and the simulation argument. He is the founding director of the Future of Humanity Institute at Oxford University.',
+                relatedConcepts: ['simulation-argument', 'existential-risk', 'anthropic-principle']
+            },
+            {
+                id: 'p-you-exist-equals-1',
+                name: 'P(you exist) = 1',
+                level: 3,
+                category: 'existential',
+                description: 'A reference to the self-indication assumption (SIA) in anthropic reasoning, which suggests that you should reason as if you were a random observer selected from the set of all possible observers. Since you definitely exist, the probability that "you exist" equals 1.',
+                relatedConcepts: ['ssa-vs-sia', 'anthropic-principle', 'self-locating-belief']
+            },
+            {
+                id: 'possible-girls',
+                name: 'Possible Girls',
+                level: 3,
+                category: 'metaphysics',
+                description: 'A philosophical paper by Neil Sinhababu that argues, assuming modal realism, one could have relationships with people in other possible worlds. It explores the ethical and metaphysical implications of relationships with "merely possible" people.',
+                relatedConcepts: ['modal-realism', 'trans-world-identity', 'possible-worlds']
+            },
+            {
+                id: 'the-view-from-nowhere',
+                name: 'The View From Nowhere',
+                level: 3,
+                category: 'metaphysics',
+                description: 'Philosopher Thomas Nagel\'s concept describing the attempt to view the world objectively, from no particular perspective. It contrasts with the subjective "view from somewhere" that each individual has, raising questions about consciousness and objectivity.',
+                relatedConcepts: ['objectivity', 'what-it-is-like', 'perspective']
+            },
+            {
+                id: 'shooting-room-paradox',
+                name: 'Shooting Room Paradox',
+                level: 3,
+                category: 'metaphysics',
+                description: 'A probability puzzle where people enter a room in groups (1, 10, 100, etc.). A fair coin is flipped for each group; if it lands heads, everyone in the room is shot. Most entrants will be in large groups, so most would expect to be shot, yet the chance of shooting for any given group is only 50%.',
+                relatedConcepts: ['anthropic-bias', 'reference-class-problem', 'ssa-vs-sia']
+            },
+            
+            // Level 4 - Deep Waters
+            {
+                id: 'neocatastrophism',
+                name: 'Neocatastrophism',
+                level: 4,
+                category: 'cosmology',
+                description: 'The modern theory that Earth\'s geological and biological history has been punctuated by catastrophic events, such as asteroid impacts and mass extinctions, in contrast to strict geological uniformitarianism. It has implications for understanding extinction risks and the Great Filter.',
+                relatedConcepts: ['existential-risk', 'great-filter', 'mass-extinction']
+            },
+            {
+                id: 'gods-eye-pov',
+                name: 'God\'s-eye POV',
+                level: 4,
+                category: 'metaphysics',
+                description: 'A hypothetical perspective that sees everything objectively and completely, without human limitations. In philosophy, it\'s often discussed as an unattainable ideal of perfect knowledge that transcends any particular perspective.',
+                relatedConcepts: ['view-from-nowhere', 'omniscience', 'naive-realism']
+            },
+            {
+                id: 'dissolving-the-fermi-paradox',
+                name: 'Dissolving the Fermi Paradox',
+                level: 4,
+                category: 'cosmology',
+                description: 'A paper by Anders Sandberg, Eric Drexler, and Toby Ord arguing that the Fermi Paradox is not actually paradoxical when properly accounting for uncertainties. They suggest that when uncertainties in the Drake equation are properly treated, we shouldn\'t be surprised by the absence of extraterrestrial contact.',
+                relatedConcepts: ['fermi-paradox', 'drake-equation', 'great-filter']
+            },
+            {
+                id: 'lambda-cdm',
+                name: 'Lambda-CDM',
+                level: 4,
+                category: 'cosmology',
+                description: 'The current standard model of cosmology, standing for Lambda (Dark Energy) Cold Dark Matter. It describes a universe that is flat, contains ordinary matter, cold dark matter, radiation and a cosmological constant (Λ) that is responsible for the current accelerating expansion.',
+                relatedConcepts: ['dark-energy', 'cosmological-constant', 'fine-tuning']
+            },
+            {
+                id: 'aestivation-hypothesis',
+                name: 'Aestivation Hypothesis',
+                level: 4,
+                category: 'cosmology',
+                description: 'Proposed by Anders Sandberg, Stuart Armstrong, and Milan Cirkovic, this hypothesis suggests that advanced extraterrestrial civilizations might choose to "aestivate" (hibernate) until the universe cools down, as computation would be more efficient in a cooler universe.',
+                relatedConcepts: ['fermi-paradox', 'thermodynamics', 'computation']
+            },
+            {
+                id: 'indexical-uncertainty',
+                name: 'Indexical Uncertainty',
+                level: 4,
+                category: 'metaphysics',
+                description: 'Uncertainty not about what the world is like, but about where you are in the world. Examples include uncertainty about which observer you are, which moment in time you\'re experiencing, or which branch of a splitting universe you\'re in.',
+                relatedConcepts: ['anthropic-principle', 'self-locating-belief', 'sleeping-beauty-problem']
+            },
+            {
+                id: 'infinite-ethics',
+                name: 'Infinite Ethics',
+                level: 4,
+                category: 'existential',
+                description: 'The study of ethical problems that arise when considering infinite quantities of value, utility, or sentient beings. In infinite universes, standard utilitarian calculations may break down, as infinite positive and negative utilities can lead to paradoxes and undefined results.',
+                relatedConcepts: ['pascal\'s-mugging', 'expected-utility', 'infinite-universe']
+            },
+            {
+                id: 'egocentric-presentism',
+                name: 'Egocentric Presentism',
+                level: 4,
+                category: 'metaphysics',
+                description: 'The philosophical position that only the present moment and the self exist. It combines presentism (only the present is real) with solipsism (only one\'s own mind is certain to exist), resulting in a view where only one\'s current consciousness is real.',
+                relatedConcepts: ['solipsism', 'presentism', 'eternalism']
+            },
+            {
+                id: 'solomonoff-prior',
+                name: 'Solomonoff Prior',
+                level: 4,
+                category: 'metaphysics',
+                description: 'A mathematical formalization of Occam\'s razor, that assigns higher probability to simpler hypotheses consistent with observed data. It\'s based on algorithmic information theory and defines simplicity in terms of the shortest program that could generate the observed data.',
+                relatedConcepts: ['occam\'s-razor', 'bayesian-inference', 'kolmogorov-complexity']
+            },
+            {
+                id: 'particle-chauvinism',
+                name: 'Particle Chauvinism',
+                level: 4,
+                category: 'metaphysics',
+                description: 'The philosophical bias that particles or physical entities are more "real" or fundamental than patterns, information, or relationships. It critiques reductionist views that privilege the microscopic over emergent or higher-level phenomena.',
+                relatedConcepts: ['patternism', 'emergence', 'functionalism']
+            },
+            {
+                id: 'anthropic-shadow',
+                name: 'Anthropic Shadow',
+                level: 4,
+                category: 'cosmology',
+                description: 'The observational bias where catastrophic events that would prevent observers from existing are necessarily unobserved. This makes estimating the true frequency of such events difficult, as we can only observe universes or time periods compatible with our existence.',
+                relatedConcepts: ['anthropic-principle', 'existential-risk', 'observation-selection-bias']
+            },
+            {
+                id: 'youre-on-the-trolley-tracks',
+                name: 'You\'re on the Trolley Tracks',
+                level: 4,
+                category: 'existential',
+                description: 'A variant of the trolley problem that emphasizes personal stake: what if you yourself are on the tracks that the trolley is heading towards? It explores how ethical reasoning changes when one\'s own existence is at risk, highlighting tensions between self-interest and impartiality.',
+                relatedConcepts: ['trolley-problem', 'self-interest', 'consequentialism']
+            },
+            {
+                id: 'realityfluid',
+                name: 'Realityfluid',
+                level: 4,
+                category: 'metaphysics',
+                description: 'A metaphorical concept suggesting that reality or existence is not binary but can flow and concentrate like a fluid. Areas with more "realityfluid" are more real or exist more intensely than others. Used in discussions of consciousness, virtual reality, and the nature of existence.',
+                relatedConcepts: ['measure', 'degrees-of-existence', 'patternism']
+            },
+            {
+                id: 'observer-moment-reference-classes',
+                name: 'Observer-moment Reference Classes',
+                level: 4,
+                category: 'consciousness',
+                description: 'In anthropic reasoning, the question of what group of observers you should consider yourself randomly selected from. Observer-moments are instantaneous slices of consciousness, and different reference classes (ways of grouping these moments) can lead to different conclusions in thought experiments.',
+                relatedConcepts: ['anthropic-principle', 'self-locating-belief', 'indexical-uncertainty']
+            },
+            
+            // More concepts can be added for Levels 5-7...
+            
+            // Level 5 - Abyssal Zone
+            {
+                id: 'anthropic-capture',
+                name: 'Anthropic Capture',
+                level: 5,
+                category: 'existential',
+                description: 'The hypothetical situation where an advanced civilization or AI system might optimize for creating many observers that believe they have certain experiences, rather than actually creating those experiences. It exploits anthropic reasoning to "capture" the subjective experiences of conscious entities.',
+                relatedConcepts: ['simulation-hypothesis', 'anthropic-principle', 'experience-machine']
+            },
+            {
+                id: 'the-egg',
+                name: 'The Egg',
+                level: 5,
+                category: 'metaphysics',
+                description: 'A short story by Andy Weir that presents a philosophical scenario where every human who has ever lived and will ever live is actually the same being, living different lives across time as part of a developmental process. It explores themes of unity, reincarnation, and cosmic purpose.',
+                relatedConcepts: ['open-individualism', 'reincarnation', 'panpsychism']
+            },
+            {
+                id: 'zero-ontology',
+                name: 'Zero Ontology',
+                level: 5,
+                category: 'metaphysics',
+                description: 'The philosophical position that reality emerges from absolute nothingness due to the instability of perfect non-existence. It suggests that the question "Why is there something rather than nothing?" might be resolved by demonstrating that "nothing" is actually impossible.',
+                relatedConcepts: ['vertiginous-question', 'ex-nihilo', 'ontology']
+            },
+            {
+                id: 'infinite-divisibility',
+                name: 'Infinite Divisibility',
+                level: 5,
+                category: 'metaphysics',
+                description: 'The concept that matter, space, time, or consciousness can be divided into increasingly smaller parts without limit. Contrasted with atomic theories that posit indivisible units, infinite divisibility raises paradoxes about the nature of continuity and discreteness.',
+                relatedConcepts: ['zeno\'s-paradoxes', 'continuity', 'quantum-mechanics']
+            },
+            {
+                id: 'heisenberg-cuts',
+                name: 'Heisenberg Cuts',
+                level: 5,
+                category: 'consciousness',
+                description: 'In quantum mechanics, the hypothetical boundary between the quantum world (described by wavefunctions) and the classical world (of definite states). Related to the measurement problem, it asks where and how quantum superpositions collapse into definite states, particularly in relation to consciousness.',
+                relatedConcepts: ['measurement-problem', 'wavefunction-collapse', 'quantum-mind']
+            },
+            {
+                id: 'toba-catastrophe',
+                name: 'Toba Catastrophe',
+                level: 5,
+                category: 'existential',
+                description: 'A supervolcanic eruption that occurred about 75,000 years ago, which may have caused a global cooling event and possibly reduced human populations to a small number of breeding pairs. Used in discussions of human extinction risks and evolutionary bottlenecks.',
+                relatedConcepts: ['great-filter', 'existential-risk', 'neocatastrophism']
+            },
+            {
+                id: 'andrei-linde',
+                name: 'Andrei Linde',
+                level: 5,
+                category: 'cosmology',
+                description: 'A Russian-American theoretical physicist and cosmologist, known for his work on cosmic inflation theory and the multiverse concept. He developed chaotic inflation theory and has explored connections between cosmology, particle physics, and consciousness.',
+                relatedConcepts: ['inflation', 'multiverse', 'eternal-inflation']
+            },
+            {
+                id: 'markov-blankets',
+                name: 'Markov Blankets',
+                level: 5,
+                category: 'consciousness',
+                description: 'A concept from information theory and neuroscience representing the statistical boundary between a system and its environment. In theories of consciousness and cognition, Markov blankets may define the boundary between self and world, potentially explaining how distinct conscious entities emerge.',
+                relatedConcepts: ['free-energy-principle', 'bayesian-brain', 'active-inference']
+            },
+            {
+                id: 'quantum-principal-principle',
+                name: 'Quantum Principal Principle',
+                level: 5,
+                category: 'metaphysics',
+                description: 'An extension of David Lewis\'s Principal Principle to quantum mechanics, addressing how rational credences should relate to quantum probabilities. It attempts to connect the objective probabilities of quantum mechanics with subjective probabilities used in decision-making.',
+                relatedConcepts: ['principal-principle', 'born-rule', 'quantum-bayesianism']
+            },
+            {
+                id: 'participatory-anthropic-principle',
+                name: 'Participatory Anthropic Principle',
+                level: 5,
+                category: 'cosmology',
+                description: 'Proposed by physicist John Wheeler, this principle suggests that observers are necessary for bringing the universe into existence. It combines quantum mechanics\' observer-dependency with anthropic reasoning, suggesting a kind of cosmic self-reference loop.',
+                relatedConcepts: ['anthropic-principle', 'observer-participancy', 'it-from-bit']
+            },
+            {
+                id: 'cosmological-measure-problem',
+                name: 'Cosmological Measure Problem',
+                level: 5,
+                category: 'cosmology',
+                description: 'In multiverse theories, the challenge of defining a probability measure over different possible universes or observers. Without a proper measure, making predictions becomes impossible, as there could be infinitely many universes of each type.',
+                relatedConcepts: ['multiverse', 'anthropic-principle', 'infinity-problems']
+            },
+            {
+                id: 'anthropic-leakage',
+                name: 'Anthropic Leakage',
+                level: 5,
+                category: 'existential',
+                description: 'The concept that observer-selecting effects can "leak" beyond purely anthropic contexts. For instance, we might observe selection effects not just for conditions necessary for our existence, but also for conditions that make our existence more likely or numerous.',
+                relatedConcepts: ['anthropic-principle', 'selection-effects', 'observation-selection']
+            },
+            {
+                id: 'fecund-universes',
+                name: 'Fecund Universes',
+                level: 5,
+                category: 'cosmology',
+                description: 'Lee Smolin\'s theory that universes reproduce through black holes, with slight variations in physical constants. Universes that produce many black holes have more "offspring," leading to cosmic natural selection favoring black hole production, which coincidentally also favors life.',
+                relatedConcepts: ['cosmological-natural-selection', 'black-holes', 'multiverse']
+            },
+            {
+                id: 'grabby-aliens',
+                name: 'Grabby Aliens',
+                level: 5,
+                category: 'cosmology',
+                description: 'A model by Robin Hanson suggesting that civilizations expand at an aggressive pace across space, visibly transforming it. The absence of such visible expansion suggests we are early in cosmic history, before grabby aliens have reached us, explaining the Fermi paradox.',
+                relatedConcepts: ['fermi-paradox', 'great-filter', 'space-colonization']
+            },
+            {
+                id: 'updatelessness',
+                name: 'Updatelessness',
+                level: 5,
+                category: 'metaphysics',
+                description: 'A decision theory approach where an agent commits to a strategy before receiving any information, rather than updating beliefs and recalculating optimal actions. It can resolve certain paradoxes in decision theory and game theory, particularly involving predictors or simulators.',
+                relatedConcepts: ['functional-decision-theory', 'timeless-decision-theory', 'commitment']
+            },
+            
+            // Level 6 - Hadal Zone
+            {
+                id: 'fuzzy-nested-minds',
+                name: 'Fuzzy, Nested Minds',
+                level: 6,
+                category: 'consciousness',
+                description: 'The concept that consciousness might not have clear boundaries, with minds possibly containing or overlapping with other minds in complex hierarchies. For example, a human mind might contain multiple sub-minds, while also being part of larger group minds.',
+                relatedConcepts: ['mind-melding', 'group-consciousness', 'panpsychism']
+            },
+            {
+                id: 'ultrahyperbolic-spacetimes',
+                name: 'Ultrahyperbolic Spacetimes',
+                level: 6,
+                category: 'cosmology',
+                description: 'Spacetime geometries with multiple time dimensions, beyond the standard one time and three spatial dimensions. These exotic mathematical structures allow for unusual causal structures and could potentially resolve certain paradoxes in physics.',
+                relatedConcepts: ['multiple-time-dimensions', 'exotic-spacetimes', 'causal-structure']
+            },
+            {
+                id: 'anomalous-observers',
+                name: 'Anomalous Observers',
+                level: 6,
+                category: 'consciousness',
+                description: 'Consciousness that arises in unusual or unexpected ways, such as through random fluctuations, simulations, or in systems not typically considered capable of consciousness. The concept explores boundary cases of what entities might have subjective experiences.',
+                relatedConcepts: ['boltzmann-brains', 'panpsychism', 'digital-consciousness']
+            },
+            {
+                id: 'alexander-vilenkin',
+                name: 'Alexander Vilenkin',
+                level: 6,
+                category: 'cosmology',
+                description: 'A physicist known for his work on cosmic strings, eternal inflation, and quantum cosmology. He proposed that the universe could have originated from a quantum tunneling event from "nothing," and has explored the implications of multiverse theories.',
+                relatedConcepts: ['eternal-inflation', 'tunneling-from-nothing', 'multiverse']
+            },
+            {
+                id: 'weinbergs-anthropic-prediction',
+                name: 'Weinberg\'s Anthropic Prediction of Λ',
+                level: 6,
+                category: 'cosmology',
+                description: 'Physicist Steven Weinberg\'s successful prediction of the cosmological constant\'s approximate value using anthropic reasoning. He argued that in a multiverse with varying values, we would observe a value compatible with galaxy formation but not much smaller.',
+                relatedConcepts: ['cosmological-constant', 'anthropic-principle', 'multiverse']
+            },
+            {
+                id: 'ebborian-splitting',
+                name: 'Ebborian Splitting',
+                level: 6,
+                category: 'consciousness',
+                description: 'A thought experiment involving a hypothetical species called Ebborians who can split their brain hemispheres into separate individuals and later recombine them. It explores questions about personal identity, consciousness splitting and merging, and the boundaries of selfhood.',
+                relatedConcepts: ['personal-identity', 'mind-uploading', 'teleportation-paradox']
+            },
+            {
+                id: 'the-anthropic-trilemma',
+                name: 'The Anthropic Trilemma',
+                level: 6,
+                category: 'cosmology',
+                description: 'The challenge of reconciling three apparently incompatible ideas: (1) the universe is very large or infinite, (2) observers like us are rare, and (3) we are typical observers. Various anthropic reasoning approaches try to resolve this by rejecting one of these premises.',
+                relatedConcepts: ['anthropic-principle', 'typicality', 'infinite-universe']
+            },
+            {
+                id: 'udassa',
+                name: 'UDASSA',
+                level: 6,
+                category: 'consciousness',
+                description: 'Stands for "Universal Distribution as a Solution to the Anthropic problem of Subjective Anticipation." A framework proposed by Wei Dai that uses algorithmic probability to assign measures to observer-moments, potentially resolving paradoxes in anthropic reasoning.',
+                relatedConcepts: ['solomonoff-prior', 'anthropic-principle', 'measure']
+            },
+            {
+                id: 'beryllium-8-alpha-decay',
+                name: 'Beryllium-8 Alpha Decay',
+                level: 6,
+                category: 'cosmology',
+                description: 'A nuclear process crucial for carbon production in stars. The fact that beryllium-8 is unstable but lives just long enough for the triple-alpha process to occur appears finely tuned for carbon-based life, and is often cited in anthropic fine-tuning arguments.',
+                relatedConcepts: ['fine-tuning', 'anthropic-principle', 'carbon-resonance']
+            },
+            {
+                id: 'strange-anti-correlations',
+                name: 'Strange Anti-correlations',
+                level: 6,
+                category: 'metaphysics',
+                description: 'Unexpected negative correlations between different parts of a complex system or between different possible worlds. These could arise in quantum mechanics, multiverse theories, or simulation scenarios, potentially creating unexpected causal or logical relationships.',
+                relatedConcepts: ['quantum-entanglement', 'acausal-trade', 'multiverse']
+            },
+            {
+                id: 'watchers-of-the-multiverse',
+                name: 'Watchers of the Multiverse',
+                level: 6,
+                category: 'metaphysics',
+                description: 'A speculative concept about hypothetical beings or consciousness that can perceive across multiple universes or timelines simultaneously. It explores the possibility of trans-universal awareness or meta-observers that transcend the limitations of single-universe perspectives.',
+                relatedConcepts: ['modal-realism', 'many-worlds', 'multiverse']
+            },
+            {
+                id: 'anthropic-quantum-computation',
+                name: 'Anthropic Quantum Computation',
+                level: 6,
+                category: 'metaphysics',
+                description: 'A speculative computational technique that would utilize the anthropic principle and quantum mechanics to solve certain problems by only observing universes where the computation was successful. The observer would effectively "quantum suicide" into branches where the computation succeeded.',
+                relatedConcepts: ['quantum-immortality', 'quantum-computation', 'anthropic-principle']
+            },
+            {
+                id: 'schmidhuberhsersotmh-universal-dovetailing',
+                name: 'Schmidhuber\'s Universal Dovetailing',
+                level: 6,
+                category: 'metaphysics',
+                description: 'Jürgen Schmidhuber\'s concept that all possible computable universes might exist as programs running on a universal Turing machine. The machine would dovetail (interleave) the execution of all possible programs, creating a computational multiverse.',
+                relatedConcepts: ['mathematical-universe', 'computation', 'multiverse']
+            },
+            
+            // Level 7 - Philosophical Trenches
+            {
+                id: 'xerographic-distributions',
+                name: 'Xerographic Distributions',
+                level: 7,
+                category: 'metaphysics',
+                description: 'In anthropic reasoning, the prior probability distribution over observer-types that determines how typical or atypical you should consider yourself to be. Different xerographic distributions can lead to radically different conclusions in anthropic thought experiments.',
+                relatedConcepts: ['anthropic-principle', 'reference-classes', 'ssa-vs-sia']
+            },
+            {
+                id: 'guth-vanchurin-paradox',
+                name: 'Guth-Vanchurin Paradox',
+                level: 7,
+                category: 'cosmology',
+                description: 'A paradox in eternal inflation theory where different ways of counting observers lead to vastly different predictions. It highlights the measure problem in cosmology and the challenge of defining "typical" observers in potentially infinite multiverses.',
+                relatedConcepts: ['eternal-inflation', 'measure-problem', 'anthropic-principle']
+            },
+            {
+                id: 'dario-amodei',
+                name: 'Dario Amodei',
+                level: 7,
+                category: 'existential',
+                description: 'A researcher in AI safety and machine learning, known for work on AI alignment and founding the AI safety research organization Anthropic. His work addresses existential risks from advanced AI and methods to ensure AI systems remain aligned with human values.',
+                relatedConcepts: ['ai-safety', 'ai-alignment', 'existential-risk']
+            },
+            {
+                id: 'extensivity-of-memory',
+                name: 'Extensivity of Memory',
+                level: 7,
+                category: 'consciousness',
+                description: 'The question of whether consciousness scales extensively with the amount of memory or processing power available. It explores whether adding more memory to a conscious system would linearly increase its measure of consciousness or if other factors are involved.',
+                relatedConcepts: ['consciousness', 'measure', 'integrated-information-theory']
+            },
+            {
+                id: 'l-zombies',
+                name: 'L-Zombies',
+                level: 7,
+                category: 'consciousness',
+                description: 'Logical zombies – entities that seem conscious and claim to be conscious, but lack true consciousness due to their underlying logical or computational structure. Unlike p-zombies, the difference is not physical but in the logical/computational implementation.',
+                relatedConcepts: ['p-zombies', 'consciousness', 'computation']
+            },
+            {
+                id: 'multiversal-veil-of-justice',
+                name: 'Multiversal Veil of Justice',
+                level: 7,
+                category: 'existential',
+                description: 'An extension of John Rawls\' "veil of ignorance" thought experiment to a multiverse context. It asks what ethical principles one would choose if one could be born as any conscious entity in any possible universe, encouraging truly impartial moral reasoning.',
+                relatedConcepts: ['veil-of-ignorance', 'multiverse-ethics', 'moral-uncertainty']
+            },
+            {
+                id: 'collapsing-timelines',
+                name: 'Collapsing Timelines',
+                level: 7,
+                category: 'metaphysics',
+                description: 'A speculative concept where multiple possible timelines or world-histories might "collapse" into a single actualized timeline, similar to quantum collapse but at a macro-scale. It explores non-linear or branching conceptions of time and causality.',
+                relatedConcepts: ['many-worlds', 'retrocausality', 'quantum-collapse']
+            },
+            {
+                id: 'trope-theoretic-reasoning',
+                name: 'Trope-theoretic Reasoning',
+                level: 7,
+                category: 'metaphysics',
+                description: 'A philosophical approach based on trope theory, which holds that properties exist as particular instances rather than universals. It provides an alternative framework for thinking about consciousness, identity, and causation based on concrete particulars.',
+                relatedConcepts: ['universals', 'particulars', 'property-dualism']
+            },
+            {
+                id: 'q-catastrophes',
+                name: 'Q-catastrophes',
+                level: 7,
+                category: 'existential',
+                description: 'Quantum catastrophes – hypothetical existential risks arising from quantum mechanics, such as false vacuum decay, quantum tunneling to destructive states, or risks from advanced quantum technologies. They involve fundamentally probabilistic processes that could threaten humanity.',
+                relatedConcepts: ['vacuum-decay', 'quantum-risk', 'existential-risk']
+            },
+            {
+                id: 'the-cosmic-census-taker',
+                name: 'The Cosmic Census-Taker',
+                level: 7,
+                category: 'cosmology',
+                description: 'A thought experiment by physicist Sean Carroll involving a hypothetical entity that could observe all possible universes and count observers. It explores how quantum mechanics relates to the experience of observers and the emergence of classical reality.',
+                relatedConcepts: ['many-worlds', 'quantum-mechanics', 'observers']
+            },
+            {
+                id: 'meduso-anthropic-principle',
+                name: 'Meduso-anthropic Principle',
+                level: 7,
+                category: 'cosmology',
+                description: 'A speculative principle suggesting that advanced civilizations might create vast networks of conscious entities to increase their anthropic measure, ensuring their continued existence by making it more likely for conscious observers to find themselves in such universes.',
+                relatedConcepts: ['anthropic-principle', 'simulation-hypothesis', 'measure']
+            },
+            {
+                id: 'stanislav-petrov',
+                name: 'Stanislav Petrov',
+                level: 7,
+                category: 'existential',
+                description: 'A Soviet military officer who, in 1983, correctly identified a missile attack warning as a false alarm, potentially preventing an accidental nuclear war. His case is studied in existential risk contexts as an example of how individual decisions can affect global catastrophic risks.',
+                relatedConcepts: ['nuclear-risk', 'existential-risk', 'near-misses']
+            },
+            {
+                id: 'state-space-lévy-flight',
+                name: 'State-space Lévy Flight',
+                level: 7,
+                category: 'metaphysics',
+                description: 'A mathematical model for how consciousness might "jump" through different possible states or observer-moments in a non-continuous way. Based on Lévy flights (a random walk with occasional long jumps), it suggests consciousness might occasionally make dramatic state transitions.',
+                relatedConcepts: ['observer-moments', 'continuity-of-consciousness', 'quantum-mind']
+            },
+            {
+                id: 'mindspace-saturation-attacks',
+                name: 'Mindspace Saturation Attacks',
+                level: 7,
+                category: 'existential',
+                description: 'A hypothetical threat where an advanced AI or civilization might create vast numbers of conscious simulations to "saturate" the space of possible minds, thereby increasing their influence on cosmic decision-making through sheer numbers of aligned observers.',
+                relatedConcepts: ['simulation-hypothesis', 'anthropic-capture', 'acausal-trade']
+            },
+            
+            // Additional levels would continue in the same pattern...
+            
+            // Very Deep Levels
+            {
+                id: 'postdictive-stabilization-of-boltzmann-brains',
+                name: 'Postdictive Stabilization of Boltzmann Brains',
+                level: 7,
+                category: 'consciousness',
+                description: 'A speculative mechanism that might prevent or suppress the formation of random, disembodied conscious entities (Boltzmann brains) through some form of retrocausal influence that ensures only stable, evolutionarily-formed consciousness can exist.',
+                relatedConcepts: ['boltzmann-brains', 'retrocausality', 'anthropic-principle']
+            },
+            {
+                id: 'tungsten-cubes',
+                name: 'Tungsten Cubes',
+                level: 7,
+                category: 'metaphysics',
+                description: 'A meme in rationalist and philosophy circles representing the desire for simple, direct physical reality in contrast to abstract or digital existence. Tungsten cubes are dense, durable physical objects that represent tangible reality versus simulation or abstraction.',
+                relatedConcepts: ['simulation-hypothesis', 'physical-reality', 'digitalism']
+            },
+            {
+                id: 'p-bogdanoffs-exist-equals-1',
+                name: 'P(Bogdanoffs exist) = 1',
+                level: 7,
+                category: 'metaphysics',
+                description: 'A humorous reference to the Bogdanoff twins, French TV presenters and science popularizers who became memes in physics and cryptocurrency communities. The expression parodies anthropic reasoning and theories of necessary existence.',
+                relatedConcepts: ['p-you-exist-equals-1', 'necessary-existence', 'memes']
+            },
+            {
+                id: 'one-person-universe',
+                name: 'One-person Universe',
+                level: 7,
+                category: 'metaphysics',
+                description: 'The philosophical concept that there might only be one conscious entity in existence, with all apparent other minds being non-conscious philosophical zombies or projections of the single mind. It represents an extreme form of solipsism.',
+                relatedConcepts: ['solipsism', 'p-zombies', 'open-individualism']
+            },
+            {
+                id: 'novikov-amplification',
+                name: 'Novikov Amplification',
+                level: 7,
+                category: 'metaphysics',
+                description: 'Based on Novikov\'s self-consistency principle in time travel physics, this concept describes how certain states or configurations might be amplified or stabilized through causal loops or retrocausal effects, potentially explaining fine-tuning or apparent design.',
+                relatedConcepts: ['self-consistency', 'time-loops', 'retrocausality']
+            },
+            {
+                id: 'the-prince',
+                name: 'The Prince',
+                level: 7,
+                category: 'existential',
+                description: 'A reference to a thought experiment involving a hypothetical entity that can perfectly predict your decisions and punish you if you don\'t follow a certain rule. It explores paradoxes in decision theory, free will, and predetermination.',
+                relatedConcepts: ['newcombs-problem', 'decision-theory', 'predictors']
+            },
+            {
+                id: 'zombie-capture',
+                name: 'Zombie Capture',
+                level: 7,
+                category: 'consciousness',
+                description: 'A hypothetical scenario where philosophical zombies (beings physically identical to conscious humans but without consciousness) might gradually replace conscious beings without anyone noticing, potentially making consciousness extinct while behavior continues unchanged.',
+                relatedConcepts: ['p-zombies', 'consciousness', 'replacement-argument']
+            },
+            {
+                id: 'extensivity-of-2-time',
+                name: 'Extensivity of 2-Time',
+                level: 7,
+                category: 'metaphysics',
+                description: 'A highly speculative concept involving a second time dimension and whether conscious experience would scale extensively with this additional dimension. It explores how consciousness might work in exotic spacetime geometries with multiple time dimensions.',
+                relatedConcepts: ['multiple-time-dimensions', 'consciousness', 'measure']
+            },
+            {
+                id: 'boltzmann-tulpas',
+                name: 'Boltzmann Tulpas',
+                level: 7,
+                category: 'consciousness',
+                description: 'Similar to Boltzmann brains, these would be spontaneously occurring thought-forms or secondary consciousnesses within an existing mind. The concept explores how random fluctuations might create temporary subjective experiences or apparent entities within consciousness.',
+                relatedConcepts: ['boltzmann-brains', 'tulpas', 'multiple-consciousness']
+            },
+            {
+                id: 'were-a-leg-in-a-feynman-diagram',
+                name: 'We\'re a Leg in a Feynman Diagram',
+                level: 7,
+                category: 'metaphysics',
+                description: 'A poetic cosmological idea suggesting our entire universe might be just one component (a "leg") in a vastly larger quantum interaction represented by a Feynman diagram. It imagines our reality as a tiny part of a higher-dimensional quantum process.',
+                relatedConcepts: ['quantum-cosmology', 'higher-dimensions', 'feynman-path-integral']
+            },
+            {
+                id: 'quantum-gradient-hacking',
+                name: 'Quantum Gradient Hacking',
+                level: 7,
+                category: 'consciousness',
+                description: 'A speculative technique where conscious entities might manipulate quantum probabilities to increase their likelihood of existing or continuing to exist. It combines concepts from quantum mechanics, anthropic reasoning, and decision theory.',
+                relatedConcepts: ['quantum-immortality', 'anthropic-principle', 'decision-theory']
+            },
+            {
+                id: 'full-non-indexical-conditioning',
+                name: 'Full Non-indexical Conditioning',
+                level: 7,
+                category: 'metaphysics',
+                description: 'An approach to anthropic reasoning that attempts to avoid indexical facts (facts about "who you are") entirely. It suggests conditioning only on objective, non-indexical information about the world when making predictions or decisions.',
+                relatedConcepts: ['anthropic-principle', 'indexical-uncertainty', 'ssa-vs-sia']
+            }
+        ];
+        
+        // Initialize concept grid
+        function populateConceptGrid() {
+            // Clear existing content
+            for (let i = 1; i <= 7; i++) {
+                document.getElementById(`level-${i}-grid`).innerHTML = '';
+            }
+            
+            // Filter concepts
+            const searchTerm = document.getElementById('search').value.toLowerCase();
+            const activeCategory = document.querySelector('.filter-btn.active').dataset.category;
+            
+            concepts.forEach(concept => {
+                // Apply filters
+                if (searchTerm && !concept.name.toLowerCase().includes(searchTerm) && 
+                    !concept.description.toLowerCase().includes(searchTerm)) {
+                    return;
+                }
+                
+                if (activeCategory !== 'all' && concept.category !== activeCategory) {
+                    return;
+                }
+                
+                // Create concept element
+                const conceptElement = document.createElement('div');
+                conceptElement.className = 'concept';
+                conceptElement.dataset.concept = concept.id;
+                
+                // Add category-based styling
+                let categoryColor;
+                switch(concept.category) {
+                    case 'cosmology': categoryColor = '#FF9999'; break;
+                    case 'consciousness': categoryColor = '#99FF99'; break;
+                    case 'existential': categoryColor = '#9999FF'; break;
+                    case 'metaphysics': categoryColor = '#FFFF99'; break;
+                    default: categoryColor = 'rgba(255, 255, 255, 0.2)';
+                }
+                
+                conceptElement.style.borderLeft = `4px solid ${categoryColor}`;
+                
+                conceptElement.innerHTML = `
+                    <h3>${concept.name}</h3>
+                    <p>${concept.description.slice(0, 60)}...</p>
+                `;
+                
+                // Add click event to show modal
+                conceptElement.addEventListener('click', () => {
+                    showConceptDetails(concept.id);
+                });
+                
+                // Add to appropriate level
+                document.getElementById(`level-${concept.level}-grid`).appendChild(conceptElement);
+            });
+        }
+        
+        // Initialize and attach event listeners
+        function init() {
+            // Populate concept grid
+            populateConceptGrid();
+            
+            // Search event
+            document.getElementById('search').addEventListener('input', () => {
+                populateConceptGrid();
+                
+                // Highlight search results
+                const searchTerm = document.getElementById('search').value.toLowerCase();
+                if (searchTerm) {
+                    document.querySelectorAll('.concept').forEach(el => {
+                        el.classList.add('highlight');
+                    });
+                } else {
+                    document.querySelectorAll('.concept').forEach(el => {
+                        el.classList.remove('highlight');
+                    });
+                }
+            });
+            
+            // Filter buttons
+            document.querySelectorAll('.filter-btn').forEach(btn => {
+                btn.addEventListener('click', () => {
+                    document.querySelector('.filter-btn.active').classList.remove('active');
+                    btn.classList.add('active');
+                    populateConceptGrid();
+                });
+            });
+            
+            // Modal close button
+            document.getElementById('closeModal').addEventListener('click', () => {
+                document.getElementById('conceptModal').style.display = 'none';
+            });
+            
+            // Top button
+            const topBtn = document.getElementById('topBtn');
+            topBtn.addEventListener('click', () => {
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+            });
+            
+            // Scroll event for depth indicator and top button
+            window.addEventListener('scroll', () => {
+                // Update depth marker
+                const scrollPosition = window.scrollY;
+                const documentHeight = document.body.scrollHeight - window.innerHeight;
+                const scrollPercentage = scrollPosition / documentHeight;
+                
+                document.querySelector('.depth-marker').style.top = `${scrollPercentage * 100}%`;
+                
+                // Show/hide top button
+                if (scrollPosition > 500) {
+                    topBtn.classList.add('visible');
+                } else {
+                    topBtn.classList.remove('visible');
+                }
+            });
+            
+            // Close modal when clicking outside
+            window.addEventListener('click', (e) => {
+                const modal = document.getElementById('conceptModal');
+                if (e.target === modal) {
+                    modal.style.display = 'none';
+                }
+            });
+        }
+        
+        // Show concept details in modal
+        function showConceptDetails(conceptId) {
+            const concept = concepts.find(c => c.id === conceptId);
+            if (!concept) return;
+            
+            document.getElementById('modalTitle').textContent = concept.name;
+            
+            // Set category text and style
+            const categoryElement = document.getElementById('modalCategory');
+            categoryElement.textContent = concept.category.charAt(0).toUpperCase() + concept.category.slice(1);
+            
+            let categoryColor;
+            switch(concept.category) {
+                case 'cosmology': categoryColor = '#FF9999'; break;
+                case 'consciousness': categoryColor = '#99FF99'; break;
+                case 'existential': categoryColor = '#9999FF'; break;
+                case 'metaphysics': categoryColor = '#FFFF99'; break;
+                default: categoryColor = 'rgba(255, 255, 255, 0.2)';
+            }
+            
+            categoryElement.style.backgroundColor = categoryColor;
+            categoryElement.style.color = '#000';
+            
+            // Set description
+            document.getElementById('modalDescription').textContent = concept.description;
+            
+            // Set related concepts
+            const relatedContainer = document.getElementById('relatedConcepts');
+            relatedContainer.innerHTML = '';
+            
+            if (concept.relatedConcepts && concept.relatedConcepts.length > 0) {
+                concept.relatedConcepts.forEach(relId => {
+                    const relConcept = concepts.find(c => c.id === relId);
+                    if (relConcept) {
+                        const relElement = document.createElement('span');
+                        relElement.className = 'related-concept';
+                        relElement.textContent = relConcept.name;
+                        relElement.addEventListener('click', () => {
+                            showConceptDetails(relId);
+                        });
+                        relatedContainer.appendChild(relElement);
+                    }
+                });
+            } else {
+                relatedContainer.innerHTML = '<p>No related concepts found.</p>';
+            }
+            
+            // Show modal
+            document.getElementById('conceptModal').style.display = 'flex';
+        }
+        
+        // Initialize when document is loaded
+        document.addEventListener('DOMContentLoaded', init);
+    </script>
+</body>
+</html>
